@@ -5,8 +5,13 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         working_dir_abs = os.path.abspath(working_directory)
         target_dir = os.path.normpath(os.path.join(working_dir_abs, directory))
 
-        # Will be True or False
-        valid_target_dir = (
+        listed_dir = directory
+        if directory == ".":
+            listed_dir = "current"
+        print(f"Result for {listed_dir} directory:")
+
+        # PATH VALIDATION
+        valid_target_dir = (  # Will be True or False
             os.path.commonpath([working_dir_abs, target_dir]) == working_dir_abs
         )
 
@@ -19,7 +24,17 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         if not os.path.isdir(target_dir): 
             return f'Error: "{directory}" is not a directory'
 
-        return f'Success: "{directory}" is within the working directory'
+        # LEGACY: return f'Success: "{directory}" is within the working directory'
+
+        dir_items = os.listdir(target_dir)
+
+        item_info_list = []
+        for item in dir_items:
+            abs_item_path = os.path.join(target_dir, item)
+            item_info_list.append(
+                f'- {item}: file_size={os.path.getsize(abs_item_path)} bytes, is_dir={os.path.isdir(abs_item_path)}'
+            )
+        return "\n".join(item_info_list)
     
     except Exception as e:
         return f"Error:{e}"
