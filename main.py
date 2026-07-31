@@ -2,19 +2,25 @@ import argparse
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+from prompts import system_prompt
 
-def generate_content(client, messages, user_prompt, verbose= False):
+def generate_content(client, messages, user_prompt, verbose=False):
     response = client.chat.completions.create(
         model="openrouter/free",
         messages=messages,
+        temperature=0,
     )
-    if response.usage == None:
-            raise RuntimeError("Failed API request")
+    if response.usage is None:
+        raise RuntimeError("Failed API request")
 
-    if verbose:
-        print(f"User prompt: {user_prompt}")
-        print(f"Prompt tokens: {response.usage.prompt_tokens}")
-        print(f"Response tokens: {response.usage.completion_tokens}")
+    if verbose == True:
+        print(
+            f"""
+            "User prompt: {user_prompt}"
+            "Prompt tokens: {response.usage.prompt_tokens}"
+            "Response tokens: {response.usage.completion_tokens}"
+            """
+        )
      
     print(response.choices[0].message.content)
 
@@ -36,10 +42,8 @@ def main():
     )
 
     messages = [
-        {
-            "role": "user",
-            "content": args.user_prompt,
-        }
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": args.user_prompt}
     ]
 
     generate_content(client, messages, args.user_prompt, args.verbose)    
