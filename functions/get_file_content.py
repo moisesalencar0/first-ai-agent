@@ -1,6 +1,22 @@
 import os
 from config import MAX_CHARS
 
+schema_get_file_content = {
+    "type": "function",
+    "function": {
+        "name": "get_file_content",
+        "description": "Returns the string content of a text file (open()), truncates at 10k chars",
+        "parameters": {
+            "type": "object",
+            "file_path": {
+                "type": "string",
+                "description": "Relative path of the file to be writen, from the working directory",
+            },
+            "required": ["file_path"]
+        },
+    },
+}
+
 def get_file_content(working_directory: str, file_path: str) -> str:
     try:
         working_dir_abs = os.path.abspath(working_directory)

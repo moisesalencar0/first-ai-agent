@@ -4,7 +4,7 @@ import json
 from dotenv import load_dotenv
 from openai import OpenAI
 from prompts import system_prompt
-from call_function import available_functions
+from call_function import available_functions, call_function
 
 def generate_content(client, messages, user_prompt, verbose=False):
     response = client.chat.completions.create(
@@ -17,7 +17,7 @@ def generate_content(client, messages, user_prompt, verbose=False):
     if response.usage is None:
         raise RuntimeError("Failed API request")
 
-    if verbose == True:
+    if verbose:
         print(
             f"""
             "User prompt: {user_prompt}"
@@ -26,13 +26,20 @@ def generate_content(client, messages, user_prompt, verbose=False):
             """
         )
 
-    message_result = response.choices[0].message
-    if message_result.tool_calls is not None:
-        for tool_call in message_result.tool_calls:
+    message_return = response.choices[0].message
+    if message_return.tool_calls is not None:
+        for tool_call in message_return.tool_calls:
             function_args = json.loads(tool_call.function.arguments or "{}")
-            print(f"Calling function: {tool_call.function.name}({function_args})")
-    else:
-        print(message_result.content)
+
+            result_message = call_function(tool_call, verbose)
+            
+            if not ("content" in result_message and result_message["content"] != ""):
+                raise Exception("empty or nonexistent result message from tool call (function call)")
+
+            if verbose:
+                print(f"-> {result_message['content']}")
+    else:    
+        print(message_return.content)
 
     
 def main():
