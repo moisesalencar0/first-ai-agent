@@ -5,7 +5,7 @@ schema_get_file_content = {
     "type": "function",
     "function": {
         "name": "get_file_content",
-        "description": "Returns the string content of a text file (open()), truncates at 10k chars",
+        "description": "Returns the contents of a text file, truncated to 10,000 characters.",
         "parameters": {
             "type": "object",
             "file_path": {

@@ -1,9 +1,9 @@
 import json
+from collections.abc import Callable
 from functions.get_files_info import schema_get_files_info, get_files_info
 from functions.get_file_content import schema_get_file_content, get_file_content
 from functions.run_python_file import schema_run_python_file, run_python_file
 from functions.write_file import schema_write_file, write_file
-from collections.abc import Callable
 
 available_functions = [
     schema_get_files_info,
@@ -40,7 +40,7 @@ def call_function(tool_call, verbose: bool = False) -> dict:
     result = function_map[function_name](**function_args)
 
     return {
-    "role": "tool",
-    "tool_call_id": tool_call.id,
-    "content": result,
-}
+        "role": "tool",
+        "tool_call_id": tool_call.id,
+        "content": result,
+    }

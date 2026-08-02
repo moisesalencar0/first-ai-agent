@@ -11,7 +11,7 @@ def generate_content(client, messages, user_prompt, verbose=False):
         model="openrouter/free",
         messages=messages,
         temperature=0,
-        tools=available_functions,
+        tools=available_functions
     )
 
     if response.usage is None:
@@ -26,20 +26,18 @@ def generate_content(client, messages, user_prompt, verbose=False):
             """
         )
 
-    message_return = response.choices[0].message
-    if message_return.tool_calls is not None:
-        for tool_call in message_return.tool_calls:
-            function_args = json.loads(tool_call.function.arguments or "{}")
-
-            result_message = call_function(tool_call, verbose)
+    output_message = response.choices[0].message
+    if output_message.tool_calls is not None:
+        for tool_call in output_message.tool_calls:
+            call_function_result = call_function(tool_call, verbose)
             
-            if not ("content" in result_message and result_message["content"] != ""):
-                raise Exception("empty or nonexistent result message from tool call (function call)")
+            if "content" not in call_function_result or call_function_result["content"] == "":
+                raise Exception("Non-existent or empty result message from tool call")
 
             if verbose:
-                print(f"-> {result_message['content']}")
+                print(f"-> {call_function_result['content']}")
     else:    
-        print(message_return.content)
+        print(output_message.content)
 
     
 def main():
@@ -51,9 +49,10 @@ def main():
     load_dotenv()
     api_key = os.environ.get("OPENROUTER_API_KEY")
 
-    if api_key == None:
+    if api_key is None:
         raise RuntimeError("OpenRouter API not found")
 
+    # Authenticate for OpenAI usage
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
         api_key=api_key,

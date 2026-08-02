@@ -4,7 +4,7 @@ schema_run_python_file = {
     "type": "function",
     "function": {
         "name": "run_python_file",
-        "description": "Executes (run) a python file",
+        "description": "Executes a Python file",
         "parameters": {
             "type": "object",
             "properties":{
@@ -49,7 +49,6 @@ def run_python_file(
         command = ["python", target_file]
         if args is not None:
             command.extend(args)
-        
 
         result = subprocess.run(
             command,

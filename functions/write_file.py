@@ -4,7 +4,7 @@ schema_write_file = {
     "type": "function",
     "function": {
         "name": "write_file",
-        "description": "Write on a text file",
+        "description": "Writes on a text file",
         "parameters": {
             "type": "object",
             "properties": {
