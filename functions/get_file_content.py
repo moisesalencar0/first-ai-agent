@@ -42,6 +42,7 @@ def get_file_content(working_directory: str, file_path: str) -> str:
                 file_content_string += f'[...File "{target_file}" truncated at {MAX_CHARS} characters]'
 
         # After reading the first MAX_CHARS...
+        print(f"    content of {file_path}got!")
         return file_content_string
     
     except Exception as e:

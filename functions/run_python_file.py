@@ -64,10 +64,12 @@ def run_python_file(
         if result.stderr == "" and result.stdout == "":
             parts.append("No output produced")
         else:
-            parts.append(f"STDERR:{result.stderr}")
-            parts.append(f"STDOUT:{result.stdout}")
+            parts.append(f"    STDERR: {result.stderr}")
+            parts.append(f"    STDOUT: {result.stdout}")
 
-        return "\n".join(parts)
+        final_string = "\n".join(parts)
+        print(final_string)
+        return final_string
     
     except Exception as e:
         return f"Error: executing Python file: {e}"

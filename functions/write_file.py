@@ -49,7 +49,9 @@ def write_file(working_directory: str, file_path: str, content: str) -> str:
             f.write(content)
 
         # After reading the first MAX_CHARS...
-        return f'Successfully wrote to "{file_path}" ({len(content)} characters written)'
+        final_string = f'   Successfully wrote to "{file_path}" ({len(content)} characters written)'
+        print(final_string)
+        return final_string
     
     except Exception as e:
         return f"Error:{e}"

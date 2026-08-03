@@ -25,7 +25,7 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         listed_dir = directory
         if directory == ".":
             listed_dir = "current"
-        print(f"Result for {listed_dir} directory:")
+        print(f"    > Result for {listed_dir} directory:")
 
         # PATH VALIDATION
         valid_target_dir = (  # Will be True or False
@@ -33,7 +33,7 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         )
 
         if not valid_target_dir:
-            return(
+            return (
                 f'Error: Cannot list "{directory}"'
                 'as it is outside the permitted working directory'
             )
@@ -47,10 +47,12 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         for item in dir_items:
             abs_item_path = os.path.join(target_dir, item)
             item_info_list.append(
-                f'- {item}: file_size={os.path.getsize(abs_item_path)} bytes, '
+                f'    - {item}: file_size={os.path.getsize(abs_item_path)} bytes, '
                 f'is_dir={os.path.isdir(abs_item_path)}'
             )
-        return "\n".join(item_info_list)
-    
+        final_string = "\n".join(item_info_list)
+        print(final_string)
+        return final_string
+
     except Exception as e:
         return f"Error:{e}"

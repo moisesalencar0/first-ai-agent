@@ -17,9 +17,9 @@ def call_function(tool_call, verbose: bool = False) -> dict:
     function_args = json.loads(tool_call.function.arguments or "{}")
 
     if verbose:
-        print(f" - Calling function: {function_name}({function_args})")
+        print(f"(Calling function) {function_name}({function_args})")
     else:
-        print(f" - Calling function: {function_name}")
+        print(f"(Calling function) {function_name}")
 
     function_map: dict[str, Callable[..., str]] = {
         "get_files_info": get_files_info,
